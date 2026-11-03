@@ -1,54 +1,68 @@
-# shelf
+# Shelf
 
-> A short, one-line description of what **shelf** does.
+A free personal page at `your-site/username` that shows who you are through what you love: your
+ranked favorite films, shows, books and music, plus what you're into right now. Made for your
+Instagram/TikTok bio.
 
-## Overview
+The full product brief is in [`CLAUDE.md`](CLAUDE.md). Design mockups are in
+[`docs/design/`](docs/design/).
 
-Describe the project here: what problem it solves, who it's for, and why it exists.
+## Tech stack
 
-## Features
+- [Next.js](https://nextjs.org) (App Router) + TypeScript (strict) + Tailwind CSS
+- [Supabase](https://supabase.com): Postgres database, auth, file storage
+- Deployed on Vercel (later)
 
-- Feature one
-- Feature two
-- Feature three
+## Run it locally
 
-## Getting Started
-
-### Prerequisites
-
-List anything needed before installing (languages, runtimes, tools).
-
-### Installation
+You need [Node.js 22 LTS](https://nodejs.org).
 
 ```bash
-git clone https://github.com/zaiidq/shelf.git
-cd shelf
-# add install steps here
+npm install
+npm run dev
 ```
 
-### Usage
+Open http://localhost:3000. The demo profile is at http://localhost:3000/zaid.
 
-```bash
-# add an example of how to run or use the project
+Without any setup the app runs on bundled demo data. To use a real database, connect Supabase
+(below).
+
+## Connect Supabase
+
+1. Create a free project at [supabase.com](https://supabase.com) (pick a region near your users and
+   save the database password).
+2. Copy `.env.example` to `.env.local` and fill in:
+   - `NEXT_PUBLIC_SUPABASE_URL`: Project Settings → Data API → Project URL
+   - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`: Project Settings → API Keys → publishable key
+   - `SUPABASE_SECRET_KEY`: Project Settings → API Keys → secret key (server only, never share it)
+3. Create the tables:
+   ```bash
+   npx supabase login
+   npx supabase link --project-ref <your-project-ref>
+   npx supabase db push
+   ```
+   Your project ref is the part after `/project/` in the dashboard URL.
+4. Load the demo profile: open **SQL Editor** in the Supabase dashboard, paste the contents of
+   `supabase/seed.sql`, and click **Run**.
+5. Restart `npm run dev`.
+
+## Useful commands
+
+| Command            | What it does                                            |
+| ------------------ | ------------------------------------------------------- |
+| `npm run dev`      | Start the dev server at http://localhost:3000           |
+| `npm run build`    | Production build                                        |
+| `npm run check`    | Type check + lint + formatting check                    |
+| `npm run format`   | Auto-format all files                                   |
+| `npm run db:types` | Regenerate `src/types/database.ts` from linked Supabase |
+
+## Project layout
+
 ```
-
-## Project Structure
-
+src/app/            pages and layouts (Next.js App Router)
+src/components/     UI components
+src/lib/            shared code: env, Supabase clients, data loading
+src/types/          generated database types
+supabase/           database migrations and demo seed data
+docs/design/        reference mockups
 ```
-shelf/
-└── README.md
-```
-
-## Contributing
-
-Contributions are welcome! To contribute:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/my-feature`)
-3. Commit your changes (`git commit -m "Add my feature"`)
-4. Push to the branch (`git push origin feature/my-feature`)
-5. Open a pull request
-
-## License
-
-Specify a license here (e.g. MIT) and add a `LICENSE` file to the repository.

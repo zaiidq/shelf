@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+/*
+ * Shelf — "Cinema" design tokens.
+ * Defined once here; Tailwind turns each --color-* / --font-* / --radius-*
+ * into utilities (bg-surface, text-fg-2, font-display, rounded-card, …).
+ */
+@theme {
+  /* Colors */
+  --color-background: #0e0e10;
+  --color-surface: #17171a; /* cards */
+  --color-surface-2: #26262b; /* placeholders */
+  --color-line: #222226; /* borders, dividers */
+  --color-fg: #edeae4; /* text */
+  --color-fg-2: #c9c5bd; /* text-secondary */
+  --color-muted: #9a968e; /* text-muted */
+  --color-faint: #8a867e; /* footer muted (was #6E6A63; raised to pass 4.5:1) */
+
+  /* Shape */
+  --radius-card: 14px;
+  --radius-poster: 8px;
+
+  /* Spacing */
+  --spacing-page: 24px; /* page side padding: px-page */
+  --spacing-section: 44px; /* gap between sections: gap-section */
+
+  /* Motion */
+  --animate-fade-in: fade-in 500ms ease-out both;
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+/* Fonts come from next/font (see src/app/layout.tsx) as CSS variables. */
+@theme inline {
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-anton), Impact, "Arial Narrow", sans-serif;
+  /* The user's accent color; set per profile with data-accent (below). */
+  --color-accent: var(--accent);
+}
+
+/*
+ * Accent palette. Every value keeps at least 4.5:1 contrast on #0E0E10.
+ * Keep in sync with src/lib/accents.ts and the profiles_accent_valid check.
+ */
+:root,
+[data-accent="amber"] {
+  --accent: #e8b04b;
+}
+[data-accent="sky"] {
+  --accent: #6cb6ff;
+}
+[data-accent="mint"] {
+  --accent: #5fd3a5;
+}
+[data-accent="coral"] {
+  --accent: #f07a5a;
+}
+[data-accent="lilac"] {
+  --accent: #b79cff;
+}
+[data-accent="rose"] {
+  --accent: #f47fa8;
+}
+[data-accent="lime"] {
+  --accent: #b5d95a;
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    background-color: var(--color-background);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+  }
+
+  /* Visible focus everywhere, in the user's accent color. */
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+}

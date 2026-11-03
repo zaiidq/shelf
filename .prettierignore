@@ -1,0 +1,8 @@
+.next
+node_modules
+package-lock.json
+supabase/.temp
+.claude
+docs
+CLAUDE.md
+AGENTS.md
