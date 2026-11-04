@@ -22,7 +22,7 @@ import {
 } from "./actions";
 
 const URL_ERRORS: Record<string, string> = {
-  link: "That sign-in link is invalid or has expired. Send a new code below.",
+  link: "That sign-in link didn’t work. It may have expired, or been opened in a different browser. Send a new one below.",
   google: "Google sign-in didn’t finish. Try again, or use your email.",
 };
 
@@ -60,46 +60,62 @@ export function LoginForm() {
   if (codeSentTo) {
     return (
       <div className="flex flex-col gap-6">
-        <p className="text-[15px] leading-relaxed text-fg-2">
-          We sent a code to <strong className="font-semibold text-fg">{codeSentTo}</strong>. Enter
-          it here, or tap the link in the email.
-        </p>
+        <div className="flex flex-col gap-2">
+          <p className="text-lg font-semibold">Check your email</p>
+          <p className="text-[15px] leading-relaxed text-fg-2">
+            We sent a sign-in link to{" "}
+            <strong className="font-semibold text-fg">{codeSentTo}</strong>. Open it on this device,
+            in this browser.
+          </p>
+        </div>
 
-        <form action={verifyAction} className="flex flex-col gap-4">
-          <input type="hidden" name="email" value={codeSentTo} />
-          <div className="flex flex-col gap-2">
-            <label htmlFor="code" className={label}>
-              Code from the email
-            </label>
-            <input
-              id="code"
-              name="code"
-              className={`${input} text-center text-2xl tracking-[0.4em] tabular-nums`}
-              inputMode="numeric"
-              autoComplete="one-time-code"
-              pattern="[0-9 ]*"
-              maxLength={12}
-              required
-              autoFocus
-              aria-invalid={verifyState.status === "error"}
-              aria-describedby={verifyState.status === "error" ? "code-error" : undefined}
-            />
-            {verifyState.status === "error" ? (
-              <p id="code-error" role="alert" className={errorText}>
-                {verifyState.message}
-              </p>
-            ) : null}
-          </div>
-          <button type="submit" className={primaryButton} disabled={verifying}>
-            {verifying ? "Signing in…" : "Sign in"}
-          </button>
-        </form>
+        {/* Supabase's default email has only a link. Once our own email
+            template is enabled (custom SMTP), it also carries a code. */}
+        <details
+          open={verifyState.status === "error"}
+          className="group rounded-card border border-line px-4 [&_summary::-webkit-details-marker]:hidden"
+        >
+          <summary className="flex min-h-12 cursor-pointer items-center justify-between text-[15px] text-fg-2">
+            Got a code in the email instead?
+            <span aria-hidden="true" className="transition-transform group-open:rotate-180">
+              ▾
+            </span>
+          </summary>
+          <form action={verifyAction} className="flex flex-col gap-4 pb-4">
+            <input type="hidden" name="email" value={codeSentTo} />
+            <div className="flex flex-col gap-2">
+              <label htmlFor="code" className={label}>
+                Code from the email
+              </label>
+              <input
+                id="code"
+                name="code"
+                className={`${input} text-center text-2xl tracking-[0.4em] tabular-nums`}
+                inputMode="numeric"
+                autoComplete="one-time-code"
+                pattern="[0-9 ]*"
+                maxLength={12}
+                required
+                aria-invalid={verifyState.status === "error"}
+                aria-describedby={verifyState.status === "error" ? "code-error" : undefined}
+              />
+              {verifyState.status === "error" ? (
+                <p id="code-error" role="alert" className={errorText}>
+                  {verifyState.message}
+                </p>
+              ) : null}
+            </div>
+            <button type="submit" className={primaryButton} disabled={verifying}>
+              {verifying ? "Signing in…" : "Sign in"}
+            </button>
+          </form>
+        </details>
 
         <div className="flex flex-wrap gap-x-6">
           <form action={sendAction}>
             <input type="hidden" name="email" value={codeSentTo} />
             <button type="submit" className={textButton} disabled={sending}>
-              {sending ? "Sending…" : "Send a new code"}
+              {sending ? "Sending…" : "Send a new link"}
             </button>
           </form>
           <button type="button" className={textButton} onClick={() => setEditingEmail(true)}>
@@ -173,12 +189,12 @@ export function LoginForm() {
             </p>
           ) : (
             <p id="email-hint" className={hint}>
-              We’ll email you a code. No password needed.
+              We’ll email you a sign-in link. No password needed.
             </p>
           )}
         </div>
         <button type="submit" className={primaryButton} disabled={sending}>
-          {sending ? "Sending…" : "Email me a code"}
+          {sending ? "Sending…" : "Email me a sign-in link"}
         </button>
       </form>
     </div>

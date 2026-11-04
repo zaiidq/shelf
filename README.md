@@ -55,9 +55,11 @@ In the Supabase dashboard:
 1. **Authentication → URL Configuration**
    - Site URL: `http://localhost:3000` (your real domain later)
    - Redirect URLs: add `http://localhost:3000/**`
-2. **Authentication → Emails → Templates**: in both **Confirm sign up** and **Magic link**, replace
-   the message body with the contents of `supabase/templates/sign-in.html`. It adds the sign-in
-   code and a link that works in any browser.
+2. **Email template (later, needs custom SMTP)**: Supabase only lets you edit email templates
+   once you connect your own email sender (Authentication → Emails → SMTP). Until then the default
+   email sends a link that must be opened in the same browser. After SMTP is set up, paste
+   `supabase/templates/sign-in.html` into both **Confirm sign up** and **Magic link or OTP**: it
+   adds a 6-digit code and a link that works in any browser.
 3. **Google sign-in (optional)**: create an OAuth client (type "Web application") in the
    [Google Cloud Console](https://console.cloud.google.com/apis/credentials). Add
    `https://<your-project-ref>.supabase.co/auth/v1/callback` as an authorized redirect URI. Paste
