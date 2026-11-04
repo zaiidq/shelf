@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { connection } from "next/server";
 import { Suspense } from "react";
 
 import { getCurrentUser, getOwnUsername } from "@/lib/auth";
@@ -24,6 +25,8 @@ export default function OnboardingPage() {
 }
 
 async function Onboarding() {
+  // Per-person page: render at request time, never during prerendering.
+  await connection();
   const user = await getCurrentUser();
   if (!user) redirect("/login");
 

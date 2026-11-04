@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { connection } from "next/server";
 import { Suspense } from "react";
 
 import { secondaryButton } from "@/components/ui/styles";
@@ -27,6 +28,8 @@ export default function SettingsPage() {
 }
 
 async function Account() {
+  // Per-person page: render at request time, never during prerendering.
+  await connection();
   const user = await getCurrentUser();
   if (!user) redirect("/login");
   const username = await getOwnUsername(user.id);
