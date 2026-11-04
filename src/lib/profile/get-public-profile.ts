@@ -36,16 +36,28 @@ export async function getPublicProfile(username: string): Promise<PublicProfile 
   if (!isValidUsername(username)) return null;
 
   if (!isSupabaseConfigured()) {
+    devLog(`"${username}": Supabase not configured, using bundled demo data`);
     return username === DEMO_USERNAME ? DEMO_PROFILE : null;
   }
 
   const profile = await fetchFromSupabase(username);
+  devLog(`"${username}": loaded from Supabase (${profile ? "found" : "not found"})`);
 
   // TODO(Milestone 6): replace with live Now Playing from Last.fm.
   if (profile && username === DEMO_USERNAME && !profile.nowPlaying) {
     profile.nowPlaying = DEMO_NOW_PLAYING;
   }
   return profile;
+}
+
+/**
+ * Development only: shows in the terminal where profile data came from.
+ * Runs only when the cache is refreshed, so it also shows WHEN that happens.
+ */
+function devLog(message: string) {
+  if (process.env.NODE_ENV === "development") {
+    console.info(`[shelf] profile ${message}`);
+  }
 }
 
 async function fetchFromSupabase(username: string): Promise<PublicProfile | null> {
