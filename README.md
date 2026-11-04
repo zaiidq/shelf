@@ -39,7 +39,7 @@ Without any setup the app runs on bundled demo data. To use a real database, con
    ```bash
    npx supabase login
    npx supabase link --project-ref <your-project-ref>
-   npx supabase db push
+   npx supabase db push --remote
    ```
    Your project ref is the part after `/project/` in the dashboard URL.
 4. Load the demo profile: open **SQL Editor** in the Supabase dashboard, paste the contents of
