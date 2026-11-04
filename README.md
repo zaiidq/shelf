@@ -46,6 +46,37 @@ Without any setup the app runs on bundled demo data. To use a real database, con
    `supabase/seed.sql`, and click **Run**.
 5. Restart `npm run dev`.
 
+When new files appear in `supabase/migrations/`, run `npx supabase db push --remote` again.
+
+## Set up sign-in
+
+In the Supabase dashboard:
+
+1. **Authentication → URL Configuration**
+   - Site URL: `http://localhost:3000` (your real domain later)
+   - Redirect URLs: add `http://localhost:3000/**`
+2. **Authentication → Emails → Templates**: in both **Confirm sign up** and **Magic link**, replace
+   the message body with the contents of `supabase/templates/sign-in.html`. It adds the sign-in
+   code and a link that works in any browser.
+3. **Google sign-in (optional)**: create an OAuth client (type "Web application") in the
+   [Google Cloud Console](https://console.cloud.google.com/apis/credentials). Add
+   `https://<your-project-ref>.supabase.co/auth/v1/callback` as an authorized redirect URI. Paste
+   the client ID and secret into **Authentication → Sign In / Providers → Google**.
+
+Supabase's built-in email sender only allows a few emails per hour. Connect a real email service
+(Authentication → Emails → SMTP) before launch.
+
+## Set up search
+
+Add these to `.env.local`, then restart `npm run dev`:
+
+- `TMDB_API_KEY`: films and TV. Create an account at [themoviedb.org](https://www.themoviedb.org),
+  then Settings → API. Either the "API Key" or the "API Read Access Token" works.
+- `LASTFM_API_KEY`: music. Create an API account at
+  [last.fm/api/account/create](https://www.last.fm/api/account/create).
+
+Books (Open Library) need no key.
+
 ## Useful commands
 
 | Command            | What it does                                            |

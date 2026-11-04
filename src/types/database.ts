@@ -308,7 +308,17 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      publish_shelf: {
+        Args: {
+          p_avatar_path?: string;
+          p_bio: string;
+          p_display_name: string;
+          p_items: Json;
+          p_section_kind: Database["public"]["Enums"]["section_kind"];
+          p_username: string;
+        };
+        Returns: string;
+      };
     };
     Enums: {
       entry_status:
