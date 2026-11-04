@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { primaryButton, secondaryButton, textButton } from "@/components/ui/styles";
+
 // Placeholder home page until the real landing page is designed.
 export default function Home() {
   return (
@@ -9,12 +11,18 @@ export default function Home() {
         Show who you are through what you love: your ranked favorite films, shows, books and music,
         on one page for your bio.
       </p>
-      <p>
-        <Link
-          href="/zaid"
-          className="inline-flex min-h-11 items-center rounded-full bg-accent px-5 font-semibold text-background"
-        >
+      <div className="flex flex-wrap gap-3">
+        <Link href="/signup" className={primaryButton}>
+          Make your shelf
+        </Link>
+        <Link href="/zaid" className={secondaryButton}>
           See a demo shelf
+        </Link>
+      </div>
+      <p className="text-sm text-muted">
+        Already have one?{" "}
+        <Link href="/login" className={textButton}>
+          Sign in
         </Link>
       </p>
     </main>

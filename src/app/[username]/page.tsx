@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
 import { ProfileView } from "@/components/profile/profile-view";
 import { DEMO_USERNAME } from "@/lib/profile/demo";
@@ -43,7 +44,20 @@ export async function generateMetadata({ params }: PageProps<"/[username]">): Pr
   };
 }
 
-export default async function ProfilePage({ params }: PageProps<"/[username]">) {
+/**
+ * The URL is read inside <Suspense>, as Next.js recommends: the page's
+ * shell can then be shown instantly on navigation while the profile loads.
+ * (Visits from a link still get the fully prerendered page.)
+ */
+export default function ProfilePage({ params }: PageProps<"/[username]">) {
+  return (
+    <Suspense fallback={<div className="min-h-dvh bg-background" />}>
+      <Profile params={params} />
+    </Suspense>
+  );
+}
+
+async function Profile({ params }: Pick<PageProps<"/[username]">, "params">) {
   const profile = await loadProfile(params);
   if (!profile) notFound();
   return <ProfileView profile={profile} />;
