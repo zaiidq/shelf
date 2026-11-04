@@ -1,5 +1,7 @@
 import Image from "next/image";
 
+import { isOptimizableImage } from "@/lib/image-hosts";
+
 import type { PublicProfile } from "@/lib/profile/types";
 
 /** Smaller type for longer names so they never overflow a phone screen. */
@@ -19,7 +21,15 @@ export function ProfileHeader({ profile }: { profile: PublicProfile }) {
       {/* Cover: uploaded image, else #1 film backdrop, else a warm dark fallback. */}
       <div aria-hidden="true" className="absolute inset-0 -z-10 overflow-hidden">
         {coverUrl ? (
-          <Image src={coverUrl} alt="" fill priority sizes="100vw" className="object-cover" />
+          <Image
+            src={coverUrl}
+            unoptimized={!isOptimizableImage(coverUrl)}
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
+          />
         ) : (
           <div className="h-full w-full bg-[radial-gradient(120%_90%_at_70%_0%,#3a2e22_0%,#2a2219_45%,#0e0e10_100%)]" />
         )}
@@ -32,6 +42,7 @@ export function ProfileHeader({ profile }: { profile: PublicProfile }) {
           {avatarUrl ? (
             <Image
               src={avatarUrl}
+              unoptimized={!isOptimizableImage(avatarUrl)}
               alt={displayName}
               width={48}
               height={48}

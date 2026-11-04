@@ -1,5 +1,7 @@
 import Image from "next/image";
 
+import { isOptimizableImage } from "@/lib/image-hosts";
+
 import { formatRank, itemMeta } from "@/lib/profile/labels";
 import type { ShelfEntry } from "@/lib/profile/types";
 
@@ -27,6 +29,7 @@ export function HeroCard({ entry, label }: { entry: ShelfEntry; label: string })
         <div aria-hidden="true" className="absolute inset-0 -z-10">
           <Image
             src={background}
+            unoptimized={!isOptimizableImage(background)}
             alt=""
             fill
             sizes="(min-width: 640px) 592px, 100vw"

@@ -1,5 +1,7 @@
 import Image from "next/image";
 
+import { isOptimizableImage } from "@/lib/image-hosts";
+
 import type { MediaItem } from "@/lib/profile/types";
 
 const SQUARE_KINDS = new Set<MediaItem["kind"]>(["album", "track", "artist"]);
@@ -39,6 +41,7 @@ export function Artwork({
       <div className={`relative overflow-hidden bg-surface-2 ${className}`}>
         <Image
           src={item.imageUrl}
+          unoptimized={!isOptimizableImage(item.imageUrl)}
           alt={item.title}
           fill
           sizes={sizes}

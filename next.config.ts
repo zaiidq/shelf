@@ -1,12 +1,14 @@
 import type { NextConfig } from "next";
 import type { RemotePattern } from "next/dist/shared/lib/image-config";
 
-// Hosts that profile images may come from.
-const remotePatterns: RemotePattern[] = [
-  { protocol: "https", hostname: "image.tmdb.org", pathname: "/t/p/**" }, // films & shows
-  { protocol: "https", hostname: "covers.openlibrary.org", pathname: "/b/**" }, // books
-  { protocol: "https", hostname: "lastfm.freetls.fastly.net", pathname: "/i/**" }, // music
-];
+import { MEDIA_IMAGE_HOSTS } from "./src/lib/image-hosts";
+
+// Hosts that profile images may come from (see src/lib/image-hosts.ts).
+const remotePatterns: RemotePattern[] = MEDIA_IMAGE_HOSTS.map(({ hostname, pathname }) => ({
+  protocol: "https",
+  hostname,
+  pathname,
+}));
 
 // Uploaded avatars and covers (Supabase Storage).
 if (process.env.NEXT_PUBLIC_SUPABASE_URL) {

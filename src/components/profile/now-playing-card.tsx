@@ -1,5 +1,7 @@
 import Image from "next/image";
 
+import { isOptimizableImage } from "@/lib/image-hosts";
+
 import { formatDuration } from "@/lib/profile/labels";
 import type { NowPlaying } from "@/lib/profile/types";
 
@@ -23,6 +25,7 @@ export function NowPlayingCard({ nowPlaying }: { nowPlaying: NowPlaying }) {
         {imageUrl ? (
           <Image
             src={imageUrl}
+            unoptimized={!isOptimizableImage(imageUrl)}
             alt={album ? `${album} cover` : `${track} cover`}
             width={64}
             height={64}
